@@ -12,9 +12,9 @@ namespace Vidzy
         {
          var DBContext = new VidzyEntities();
          var ReleaseDate = new System.DateTime(2008, 3, 9);
-         
-         DBContext.AddVideo("Se7en", ReleaseDate, "Horror");
-         DBContext.AddVideo("Watchmen",  new System.DateTime(2009, 7, 10), "Action");   
+            
+         DBContext.AddVideo("Se7en", ReleaseDate, "Horror", (byte)Classification.Platinum);
+         DBContext.AddVideo("Watchmen",  new System.DateTime(2009, 7, 10), "Action", 2);   
          
             
 

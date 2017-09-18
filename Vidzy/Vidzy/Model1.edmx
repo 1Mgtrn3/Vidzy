@@ -29,8 +29,21 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="ReleaseDate" Type="datetime" Nullable="false" />
-          <Property Name="GenreId" Type="tinyint" />
+          <Property Name="GenreId" Type="tinyint" Nullable="false" />
+          <Property Name="Classification" Type="tinyint" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Videos_Genres">
+          <End Role="Genres" Type="Self.Genres" Multiplicity="1" />
+          <End Role="Videos" Type="Self.Videos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genres">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Videos">
+              <PropertyRef Name="GenreId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
         <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
@@ -66,11 +79,16 @@
           <Parameter Name="Name" Type="varchar" Mode="In" />
           <Parameter Name="ReleaseDate" Type="datetime" Mode="In" />
           <Parameter Name="Genre" Type="varchar" Mode="In" />
+          <Parameter Name="Classification" Type="tinyint" Mode="In" />
         </Function>
         <EntityContainer Name="VidzyModelStoreContainer">
           <EntitySet Name="Genres" EntityType="Self.Genres" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Videos" EntityType="Self.Videos" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Videos_Genres" Association="Self.FK_Videos_Genres">
+            <End Role="Genres" EntitySet="Genres" />
+            <End Role="Videos" EntitySet="Videos" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -93,6 +111,7 @@
           <Property Name="ReleaseDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="GenreId" Type="Byte" Nullable="false" />
           <NavigationProperty Name="Genre" Relationship="VidzyModel.GenreVideo" FromRole="Video" ToRole="Genre" />
+          <Property Name="Classification" Type="VidzyModel.Classification" Nullable="false" />
         </EntityType>
         <EntityContainer Name="VidzyEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Genres" EntityType="Self.Genre" />
@@ -101,6 +120,7 @@
             <Parameter Name="Name" Mode="In" Type="String" />
             <Parameter Name="ReleaseDate" Mode="In" Type="DateTime" />
             <Parameter Name="Genre" Mode="In" Type="String" />
+            <Parameter Name="Classification" Mode="In" Type="Byte" />
           </FunctionImport>
           <EntitySet Name="sysdiagrams" EntityType="VidzyModel.sysdiagram" />
           <FunctionImport Name="sp_alterdiagram">
@@ -171,6 +191,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EnumType Name="Classification" UnderlyingType="Byte">
+          <Member Name="Silver" Value="1" />
+          <Member Name="Gold" Value="2" />
+          <Member Name="Platinum" Value="3" />
+        </EnumType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -188,6 +213,7 @@
           <EntitySetMapping Name="Videos">
             <EntityTypeMapping TypeName="VidzyModel.Video">
               <MappingFragment StoreEntitySet="Videos">
+                <ScalarProperty Name="Classification" ColumnName="Classification" />
                 <ScalarProperty Name="GenreId" ColumnName="GenreId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />

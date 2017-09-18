@@ -31,7 +31,7 @@ namespace Vidzy
         public virtual DbSet<Video> Videos { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
     
-        public virtual int AddVideo(string name, Nullable<System.DateTime> releaseDate, string genre)
+        public virtual int AddVideo(string name, Nullable<System.DateTime> releaseDate, string genre, Nullable<byte> classification)
         {
             var nameParameter = name != null ?
                 new ObjectParameter("Name", name) :
@@ -45,7 +45,11 @@ namespace Vidzy
                 new ObjectParameter("Genre", genre) :
                 new ObjectParameter("Genre", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddVideo", nameParameter, releaseDateParameter, genreParameter);
+            var classificationParameter = classification.HasValue ?
+                new ObjectParameter("Classification", classification) :
+                new ObjectParameter("Classification", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddVideo", nameParameter, releaseDateParameter, genreParameter, classificationParameter);
         }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
