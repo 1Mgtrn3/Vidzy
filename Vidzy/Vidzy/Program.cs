@@ -10,6 +10,14 @@ namespace Vidzy
     {
         static void Main(string[] args)
         {
+         var DBContext = new VidzyEntities();
+         var ReleaseDate = new System.DateTime(2008, 3, 9);
+         
+         DBContext.AddVideo("Se7en", ReleaseDate, "Horror");
+         DBContext.AddVideo("Watchmen",  new System.DateTime(2009, 7, 10), "Action");   
+         
+            
+
         }
     }
 }

@@ -100,14 +100,14 @@
           <End Role="Genres" Type="Self.Genre" Multiplicity="*" />
           <End Role="Videos" Type="Self.Video" Multiplicity="*" />
         </Association>
-        <EntityContainer Name="VidzyDataContext" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="VidzyEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Genres" EntityType="Self.Genre" />
           <EntitySet Name="Videos" EntityType="Self.Video" />
           <AssociationSet Name="VideoGenres" Association="Self.VideoGenres">
             <End Role="Genres" EntitySet="Genres" />
             <End Role="Videos" EntitySet="Videos" />
           </AssociationSet>
-          <FunctionImport Name="spAddVideo">
+          <FunctionImport Name="AddVideo">
             <Parameter Name="Name" Mode="In" Type="String" />
             <Parameter Name="ReleaseDate" Mode="In" Type="DateTime" />
             <Parameter Name="Genre" Mode="In" Type="String" />
@@ -118,7 +118,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="VidzyModelStoreContainer" CdmEntityContainer="VidzyDataContext">
+        <EntityContainerMapping StorageEntityContainer="VidzyModelStoreContainer" CdmEntityContainer="VidzyEntities">
           <EntitySetMapping Name="Genres">
             <EntityTypeMapping TypeName="VidzyModel.Genre">
               <MappingFragment StoreEntitySet="Genres">
@@ -144,7 +144,7 @@
               <ScalarProperty Name="Id" ColumnName="VideoId" />
             </EndProperty>
           </AssociationSetMapping>
-          <FunctionImportMapping FunctionImportName="spAddVideo" FunctionName="VidzyModel.Store.spAddVideo" />
+          <FunctionImportMapping FunctionImportName="AddVideo" FunctionName="VidzyModel.Store.spAddVideo" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

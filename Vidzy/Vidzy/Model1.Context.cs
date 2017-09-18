@@ -15,10 +15,10 @@ namespace Vidzy
     using System.Data.Entity.Core.Objects;
     using System.Linq;
     
-    public partial class VidzyDataContext : DbContext
+    public partial class VidzyEntities : DbContext
     {
-        public VidzyDataContext()
-            : base("name=VidzyDataContext")
+        public VidzyEntities()
+            : base("name=VidzyEntities")
         {
         }
     
@@ -30,7 +30,7 @@ namespace Vidzy
         public virtual DbSet<Genre> Genres { get; set; }
         public virtual DbSet<Video> Videos { get; set; }
     
-        public virtual int spAddVideo(string name, Nullable<System.DateTime> releaseDate, string genre)
+        public virtual int AddVideo(string name, Nullable<System.DateTime> releaseDate, string genre)
         {
             var nameParameter = name != null ?
                 new ObjectParameter("Name", name) :
@@ -44,7 +44,7 @@ namespace Vidzy
                 new ObjectParameter("Genre", genre) :
                 new ObjectParameter("Genre", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spAddVideo", nameParameter, releaseDateParameter, genreParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddVideo", nameParameter, releaseDateParameter, genreParameter);
         }
     }
 }
